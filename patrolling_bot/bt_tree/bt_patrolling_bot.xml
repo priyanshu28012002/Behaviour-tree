@@ -1,0 +1,70 @@
+
+
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <Fallback name="RootFallback">
+      <!-- Emergency Low Battery -->
+      <Sequence name="EmergencyLowBattery">
+        <Condition ID="IsBatteryCritical" battery_threshold="10"/>
+        <Action ID="ReturnToCharging" emergency="true"/>
+      </Sequence>
+      
+      <!-- Safety Check -->
+      <Sequence name="SafetyCheck">
+        <Condition ID="IsArenaSafe"/>
+        <Invert>
+          <Condition ID="IsArenaSafe"/>
+        </Invert>
+        <Action ID="ReturnToCharging"/>
+      </Sequence>
+      
+      <!-- Normal Operations -->
+      <Fallback name="NormalOperations">
+        <!-- Risky Point Patrol -->
+        <Sequence name="RiskyPatrol">
+          <Condition ID="IsBatterySufficient" min_level="20"/>
+          <Action ID="IdentifyMostRiskyPoint"/>
+          <Action ID="SetGoal" target="most_risky"/>
+          <Action ID="PatrolWithReturn" buffer="20"/>
+        </Sequence>
+        
+        <!-- Standard Checkpoint Patrol -->
+        <Sequence name="StandardPatrol">
+          <Condition ID="IsBatterySufficient" min_level="30"/>
+          <Action ID="CheckBatteryLevel"/>
+          <Action ID="SelectNextCheckpoint"/>
+          <Action ID="PatrolCheckpoints" buffer="20"/>
+        </Sequence>
+        
+        <!-- Idle at Station -->
+        <Action ID="WaitAtChargingStation"/>
+      </Fallback>
+      
+      <!-- Fallback Safe Behavior -->
+      <Action ID="DefaultSafeBehavior"/>
+    </Fallback>
+  </BehaviorTree>
+  
+  <!-- Nodes Definitions (partial example) -->
+  <TreeNodesModel>
+    <Action ID="ReturnToCharging">
+      <param name="emergency" type="bool">false</param>
+    </Action>
+    
+    <Condition ID="IsBatteryCritical">
+      <param name="battery_threshold" type="int">10</param>
+    </Condition>
+    
+    <Condition ID="IsArenaSafe">
+      <param name="timeout" type="int">5000</param>
+    </Condition>
+    
+    <Action ID="IdentifyMostRiskyPoint">
+      <param name="risk_threshold" type="float">0.7</param>
+    </Action>
+    
+    <Action ID="PatrolWithReturn">
+      <param name="buffer" type="int">20</param>
+    </Action>
+  </TreeNodesModel>
+</root>

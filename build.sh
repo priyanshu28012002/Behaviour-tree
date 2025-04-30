@@ -1,0 +1,1 @@
+colcon build --packages-select patrolling_bot bt_topic_spiner ; source install/setup.bash ; ros2 launch patrolling_bot patrolling_bot.launch.py ;

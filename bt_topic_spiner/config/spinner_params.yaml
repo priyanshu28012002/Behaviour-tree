@@ -1,0 +1,4 @@
+bt_topic_spiner_node:
+  ros__parameters:
+    topics_name: [val,chatter]
+    topics_type: [std_msgs::msg::Int32,std_msgs::msg::String]
