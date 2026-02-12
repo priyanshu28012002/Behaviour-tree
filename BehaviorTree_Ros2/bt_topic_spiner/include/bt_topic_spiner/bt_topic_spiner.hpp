@@ -89,11 +89,11 @@ public:
         this->topic_callback<T>(topic_name, msg);
       });
     
-    // Create publisher and handler with default message
+
     auto handler = std::make_shared<TypedTopicHandler<T>>();
     handler->publisher = this->create_publisher<T>("bt/" + topic_name, 10);
     
-    // Initialize with default message
+
     handler->last_msg = std::make_shared<T>();
     initialize_default_message<T>(*handler->last_msg);
     
@@ -102,20 +102,19 @@ public:
   }
 
 private:
-  // Helper function to initialize default messages
+
   template<typename T>
   void initialize_default_message(T& msg) {
-    // Default implementation does nothing (for types that don't need initialization)
+
   }
 
-  // Specialization for std_msgs::msg::String
+
   void initialize_default_message(std_msgs::msg::String& msg) {
-    msg.data = "";  // Initialize with empty string
-  }
+    msg.data = ""; 
 
-  // Specialization for std_msgs::msg::Int32
+
   void initialize_default_message(std_msgs::msg::Int32& msg) {
-    msg.data = 0;  // Initialize with zero
+    msg.data = 0;  
   }
 
   struct TopicHandlerBase {
